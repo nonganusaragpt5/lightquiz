@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฝึกทบทวนเตรียมสอบ • วิทยาศาสตร์ ป.4 - แสง</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Sarabun', 'Segoe UI', Tahoma, sans-serif;
+    background: #f0f4f8;
+    color: #1a1a1a;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .header {
+    background: linear-gradient(135deg, #1e5aa8, #2b7de9);
+    color: white;
+    padding: 30px 24px 24px;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .subtitle {
+    font-size: 15px;
+    opacity: 0.95;
+    margin-top: 8px;
+  }
+  .instruction {
+    background: #f7f9fc;
+    border-left: 5px solid #2b7de9;
+    margin: 20px;
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    font-size: 15px;
+  }
+  .question {
+    padding: 8px 24px 20px;
+  }
+  .q-text {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 18px 0 12px;
+    color: #1a3a6e;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    background: #fafbfc;
+    border: 2px solid #e8ecf1;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .option:hover {
+    border-color: #2b7de9;
+    background: #f0f7ff;
+  }
+  .option input {
+    margin-right: 12px;
+    margin-top: 4px;
+    accent-color: #2b7de9;
+    width: 18px;
+    height: 18px;
+  }
+  .option.correct {
+    background: #e8f8ef;
+    border-color: #2ecc71;
+  }
+  .option.wrong {
+    background: #fdeaea;
+    border-color: #e74c3c;
+  }
+  .submit-area {
+    text-align: center;
+    padding: 10px 24px 30px;
+  }
+  #submitBtn {
+    background: #2b7de9;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #submitBtn:hover { background: #1e5aa8; }
+  #result {
+    display: none;
+    margin: 0 24px 30px;
+    padding: 20px;
+    background: #f0f7ff;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .score {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e5aa8;
+    margin-bottom: 8px;
+  }
+  .explanation {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #333;
+    text-align: left;
+    padding: 8px 0;
+    border-top: 1px dashed #ccc;
+  }
+  .correct-answer {
+    color: #27ae60;
+    font-weight: 600;
+  }
+  .wrong-answer {
+    color: #e74c3c;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">แบบฝึกทบทวนเตรียมสอบ • วิทยาศาสตร์ ป.4</div>
+    <div class="title">
+      <span>💡</span> แสง
+    </div>
+    <div class="subtitle">แหล่งกำเนิดแสง • แสงเดินทางเป็นเส้นตรง • วัตถุโปร่งใส-ทึบแสง • เงา</div>
+  </div>
+
+  <div class="instruction">
+    <strong>คำชี้แจง:</strong> มีทั้งหมด 10 ข้อ เลือกคำตอบที่ถูกต้องที่สุดเพียงข้อเดียว เมื่อตอบครบแล้วกด “ตรวจคำตอบ” เพื่อดูคะแนนและเฉลย
+  </div>
+
+  <form id="quizForm">
+    <!-- คำถามจะถูกสร้างด้วย JavaScript -->
+  </form>
+
+  <div class="submit-area">
+    <button type="button" id="submitBtn">ตรวจคำตอบ</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "แสงเกิดจากแหล่งใด",
+    options: [
+      "ก. วัตถุที่มีสีสัน",
+      "ข. วัตถุที่ร้อนจัดหรือมีการเผาไหม้",
+      "ค. วัตถุที่สะท้อนแสง",
+      "ง. วัตถุที่โปร่งใส"
+    ],
+    answer: 1,
+    explanation: "แหล่งกำเนิดแสงคือวัตถุที่ปล่อยแสงออกมาเอง เช่น ดวงอาทิตย์ หลอดไฟ หรือไฟจากเทียน"
+  },
+  {
+    q: "แสงเดินทางอย่างไร",
+    options: [
+      "ก. เป็นเส้นตรง",
+      "ข. เป็นเส้นโค้ง",
+      "ค. เป็นวงกลม",
+      "ง. เป็นเส้นหยัก"
+    ],
+    answer: 0,
+    explanation: "แสงเดินทางเป็นเส้นตรง ซึ่งทำให้เกิดเงาเมื่อมีวัตถุขวางทาง"
+  },
+  {
+    q: "เงาเกิดขึ้นได้อย่างไร",
+    options: [
+      "ก. เมื่อแสงผ่านวัตถุโปร่งใส",
+      "ข. เมื่อวัตถุทึบแสงขวางทางเดินของแสง",
+      "ค. เมื่อแสงสะท้อน",
+      "ง. เมื่อไม่มีแสงเลย"
+    ],
+    answer: 1,
+    explanation: "เงาเกิดเมื่อวัตถุทึบแสงขวางทางแสง ทำให้ด้านหลังวัตถุไม่มีแสงไปถึง"
+  },
+  {
+    q: "วัตถุชนิดใดที่แสงสามารถผ่านได้ทั้งหมด",
+    options: [
+      "ก. วัตถุทึบแสง",
+      "ข. วัตถุโปร่งแสง",
+      "ค. วัตถุโปร่งใส",
+      "ง. วัตถุสีดำ"
+    ],
+    answer: 2,
+    explanation: "วัตถุโปร่งใส เช่น กระจกใส แสงสามารถผ่านได้เกือบทั้งหมด"
+  },
+  {
+    q: "ข้อใดเป็นวัตถุทึบแสง",
+    options: [
+      "ก. กระจกใส",
+      "ข. กระดาษไข",
+      "ค. ผนังบ้าน",
+      "ง. น้ำใส"
+    ],
+    answer: 2,
+    explanation: "ผนังบ้านเป็นวัตถุทึบแสง แสงไม่สามารถผ่านได้"
+  },
+  {
+    q: "เมื่อแสงกระทบกระจกเงา จะเกิดอะไรขึ้น",
+    options: [
+      "ก. แสงหายไป",
+      "ข. แสงสะท้อนกลับ",
+      "ค. แสงเปลี่ยนสี",
+      "ง. แสงกลายเป็นความร้อน"
+    ],
+    answer: 1,
+    explanation: "เมื่อแสงกระทบผิวเรียบมัน เช่น กระจกเงา จะเกิดการสะท้อนของแสง"
+  },
+  {
+    q: "เราใช้ตาเพื่อทำอะไร",
+    options: [
+      "ก. รับเสียง",
+      "ข. รับแสงเพื่อให้เห็นภาพ",
+      "ค. รับกลิ่น",
+      "ง. รับรส"
+    ],
+    answer: 1,
+    explanation: "ตาเป็นอวัยวะรับแสง ทำให้เรามองเห็นสิ่งต่าง ๆ ได้"
+  },
+  {
+    q: "ข้อใดเป็นการใช้ประโยชน์จากแสงได้อย่างถูกต้อง",
+    options: [
+      "ก. ใช้ไฟฉายส่องทางในที่มืด",
+      "ข. มองดวงอาทิตย์โดยตรง",
+      "ค. ใช้เลเซอร์ชี้ตาคนอื่น",
+      "ง. เปิดไฟทั้งวันโดยไม่จำเป็น"
+    ],
+    answer: 0,
+    explanation: "ไฟฉายช่วยให้เราเห็นทางในที่มืดได้ ส่วนการมองดวงอาทิตย์โดยตรงอาจเป็นอันตรายต่อตา"
+  },
+  {
+    q: "วัตถุโปร่งแสงมีลักษณะอย่างไร",
+    options: [
+      "ก. แสงผ่านได้ทั้งหมด",
+      "ข. แสงผ่านได้บางส่วน",
+      "ค. แสงผ่านไม่ได้เลย",
+      "ง. สะท้อนแสงได้ดีมาก"
+    ],
+    answer: 1,
+    explanation: "วัตถุโปร่งแสง เช่น กระดาษไข หรือกระจกฝ้า แสงจะผ่านได้บางส่วน"
+  },
+  {
+    q: "ถ้าเราต้องการให้เกิดเงาชัด ๆ ควรทำอย่างไร",
+    options: [
+      "ก. ใช้วัตถุโปร่งใส",
+      "ข. ใช้วัตถุทึบแสง",
+      "ค. ปิดไฟทั้งหมด",
+      "ง. ใช้กระจกเงา"
+    ],
+    answer: 1,
+    explanation: "การใช้วัตถุทึบแสงขวางทางแสงจะทำให้เกิดเงาได้ชัดเจน"
+  }
+];
+
+const form = document.getElementById('quizForm');
+const submitBtn = document.getElementById('submitBtn');
+const resultDiv = document.getElementById('result');
+
+// สร้างคำถาม
+questions.forEach((item, index) => {
+  const div = document.createElement('div');
+  div.className = 'question';
+  div.innerHTML = `
+    <div class="q-text">ข้อ ${index + 1}. ${item.q}</div>
+    ${item.options.map((opt, i) => `
+      <label class="option">
+        <input type="radio" name="q${index}" value="${i}">
+        <span>${opt}</span>
+      </label>
+    `).join('')}
+  `;
+  form.appendChild(div);
+});
+
+submitBtn.addEventListener('click', () => {
+  let score = 0;
+  const answers = [];
+
+  questions.forEach((item, index) => {
+    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+    const selectedValue = selected ? parseInt(selected.value) : -1;
+    const isCorrect = selectedValue === item.answer;
+    if (isCorrect) score++;
+
+    // แสดงเฉลยบนตัวเลือก
+    const options = document.querySelectorAll(`input[name="q${index}"]`);
+    options.forEach(opt => {
+      const label = opt.parentElement;
+      label.classList.remove('correct', 'wrong');
+      if (parseInt(opt.value) === item.answer) {
+        label.classList.add('correct');
+      } else if (opt.checked && parseInt(opt.value) !== item.answer) {
+        label.classList.add('wrong');
+      }
+    });
+
+    answers.push({
+      selected: selectedValue,
+      correct: item.answer,
+      isCorrect,
+      explanation: item.explanation,
+      options: item.options
+    });
+  });
+
+  // แสดงผลคะแนน
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <div class="score">คะแนนที่ได้: ${score} / 10</div>
+    <p>ทำได้ดีมาก! ลองดูเฉลยด้านล่างเพื่อทบทวนความรู้กันเถอะ</p>
+    <div style="margin-top:20px; text-align:left;">
+      ${answers.map((a, i) => `
+        <div class="explanation">
+          <strong>ข้อ ${i + 1}:</strong> 
+          ${a.isCorrect ? '<span class="correct-answer">ถูกต้อง</span>' : '<span class="wrong-answer">ยังไม่ถูกต้อง</span>'}
+          <br>
+          คำตอบที่ถูกคือ <strong>${questions[i].options[a.correct]}</strong>
+          <br>
+          <em>${a.explanation}</em>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // เลื่อนไปที่ผลคะแนน
+  resultDiv.scrollIntoView({ behavior: 'smooth' });
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'ตรวจคำตอบแล้ว';
+});
+</script>
+</body>
+</html>
